@@ -9,20 +9,27 @@ const Results = ({ word, phonetics, meanings, setText }) => {
           <span key={index}>{phonetic.text}</span>
         ))}
       </li>
-      <li className="contain">
-        <h3>noun</h3>
-        <div className="details">
-          <h3>Meaning</h3>
-          <p>-used as a greeting or to begin a phone conversation</p>
-        </div>
-
-        <div className="synonym">
-          <h3>Synonyms</h3>
-          <span>greeting,</span>
-          <span>greeting,</span>
-          <span>greeting</span>
-        </div>
-      </li>
+      {meanings.map((meaning, index) => (
+        <li className="contain">
+          <h3>noun</h3>
+          <div className="details">
+            <h3>Meaning</h3>
+            {meaning.definitions.map((definition, index) => (
+              <p key={index}>-{definition.definition}</p>
+            ))}
+          </div>
+          {meaning.synonyms.length !== 0 && (
+            <div className="synonym">
+              <h3>Synonyms</h3>
+              {meaning.synonyms.map((synonym, index) => (
+                <span key={index} onClick={() => setText(synonym)}>
+                  {`${synonym}, `}
+                </span>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
     </ul>
   );
 };

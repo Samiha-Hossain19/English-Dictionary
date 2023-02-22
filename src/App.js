@@ -27,10 +27,20 @@ const App = () => {
       .catch((err) => setError(err));
   };
 
-  useEffect(() => {
-    if (!text.trim()) return;
+  const reset = () => {
+    setIsSpeaking("");
+    setError("");
+    setMeanings([]);
+    setPhonetics([]);
+    setWord("");
+  };
 
-    dictionaryApi(text);
+  useEffect(() => {
+    if (!text.trim()) return reset();
+    const debounce = setTimeout(() => {
+      dictionaryApi(text);
+    }, 1000);
+    return () => clearTimeout(debounce);
   }, [text]);
 
   const startSpeech = (text) => {
@@ -89,12 +99,15 @@ const App = () => {
           </div>
         </div>
       </form>
-      <Results
-        word={word}
-        phonetics={phonetics}
-        meanings={meanings}
-        setText={setText}
-      />
+
+      {text.trim() !== "" && !error && (
+        <Results
+          word={word}
+          phonetics={phonetics}
+          meanings={meanings}
+          setText={setText}
+        />
+      )}
     </div>
   );
 };
